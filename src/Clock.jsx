@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 
-const Clock = ({running, setIsCompleted}) => {
+const Clock = ({running, setIsCompleted, reset, setReset}) => {
     const [clockTime, setClockTime] = useState(5);
-    const timer = useRef(null);
+    let timer = useRef(null);
 
     const startClock = () => {
+        setReset(false);
         if(timer.current) { return }
         timer.current = setInterval(() => setClockTime(clockTime => clockTime -1), 1000);
     }
@@ -15,8 +16,15 @@ const Clock = ({running, setIsCompleted}) => {
     }
 
     useEffect(() => {
+        if(reset === true) {
+            setClockTime(5);
+            clearInterval(timer.current);
+            timer.current = null;
+        }
+    }, [reset]);
+
+    useEffect(() => {
         if(!clockTime > 0) {
-            console.log('clockTime not greater than zero: ', clockTime);
             stopClock();
             setIsCompleted(true);
         }
@@ -31,7 +39,7 @@ const Clock = ({running, setIsCompleted}) => {
     }, [running])
 
     return(
-        <div>{`${clockTime}`}</div>
+        <div>{`${clockTime} s`}</div>
     );
 }
 

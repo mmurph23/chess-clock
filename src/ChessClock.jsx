@@ -5,26 +5,41 @@ const ChessClock = () => {
     // if whose turn 0, it's blacks turn, else 1, it's whites turn
     const [whoseTurn, setWhoseTurn] = useState();
     const [isCompleted, setIsCompleted] = useState(false);
-    console.log('isCompleted: ', isCompleted);
+    const [reset, setReset] = useState(false);
+
     return(
         <>
-        <Clock
-            running={whoseTurn === 0}
-            setIsCompleted={setIsCompleted}/>
-        <Clock
-            running={whoseTurn === 1}
-            setIsCompleted={setIsCompleted}/>
-        <button
-            disabled={isCompleted}
-            onClick={() => setWhoseTurn(1)}>
-            White Turn
-        </button>
-        <button
-            disabled={isCompleted}
-            onClick={() => setWhoseTurn(0)}>
-            Black Turn
-        </button>
-        {isCompleted && <div>Game over! {whoseTurn === 0? "Black" : "White" } player ran out of time.</div>}
+            <Clock
+                running={whoseTurn === 0}
+                reset={reset}
+                setReset={setReset}
+                setIsCompleted={setIsCompleted}
+                user={'Black'}/>
+            <Clock
+                running={whoseTurn === 1}
+                reset={reset}
+                setReset={setReset}
+                setIsCompleted={setIsCompleted}
+                user={'White'}/>
+            <button
+                disabled={isCompleted}
+                onClick={() => setWhoseTurn(1)}>
+                White Turn
+            </button>
+            <button
+                disabled={isCompleted}
+                onClick={() => setWhoseTurn(0)}>
+                Black Turn
+            </button>
+            <button
+                disabled={!isCompleted}
+                onClick={() => {
+                    setWhoseTurn()
+                    setReset(true)
+                    setIsCompleted(false)}}>
+                Reset Clock
+            </button>
+            {isCompleted && <div>Game over! {whoseTurn === 0? "Black" : "White" } player ran out of time.</div>}
         </>
         
     );
